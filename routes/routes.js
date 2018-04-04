@@ -27,7 +27,7 @@ var appRouter = function (app) {
 			res.send({"Error": "Invalid format."}); 
 		}
 		else{
-			request.get({ url: "https://www.warcraftlogs.com:443/v1/reports/guild/" + req.params.guild + "/" + req.params.server + "/" + req.params.realm + "?metric=dps&api_key=" + process.env.WCLOGS_API},      function(error, response, body) {
+			request.get({ url: "https://www.warcraftlogs.com:443/v1/reports/guild/" + req.params.guild + "/" + req.params.server + "/" + req.params.realm + "?api_key=" + process.env.WCLOGS_API},      function(error, response, body) {
  
 				if (!error && response.statusCode == 200) { 
 					res.send(body); 
@@ -35,6 +35,21 @@ var appRouter = function (app) {
 			});
 		}
 	});
+	app.get("/report/fights/:code", function(req, res) {
+		if (!req.params.code) { 
+			res.status(500); 
+			res.send({"Error": "Invalid format."}); 
+		}
+		else{
+			request.get({ url: "https://www.warcraftlogs.com:443/v1/report/fights/" + req.params.code + "?api_key=" + process.env.WCLOGS_API},      function(error, response, body) {
+ 
+			if (!error && response.statusCode == 200) { 
+				res.send(body); 
+			} 
+		});
+	}
+});
+			
 }
   
 module.exports = appRouter;
